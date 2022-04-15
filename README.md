@@ -1,0 +1,2 @@
+# Planz
+Event planning app
