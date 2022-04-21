@@ -6,6 +6,7 @@ from django.urls import include, re_path
 
 router = routers.DefaultRouter()
 router.register(r'groups', views.GroupViewset)
+router.register(r'events', views.EventViewset)
 
 urlpatterns = [
     re_path(r'^', include(router.urls)),

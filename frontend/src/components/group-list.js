@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom'
+import { getGroups } from './services/api-calls'
 
 function GroupList() {
   const [ groups, setGroups ] = useState(null);
@@ -7,12 +9,12 @@ function GroupList() {
 
 
   useEffect (() => {
+    setLoading(false);
     const getData = async () => {
-      await fetch('http://127.0.0.1:8000/api/groups/')
-      .then(resp => resp.json())
-      .then(data => {
-        setGroups(data);
+      await getGroups()
+      .then( data => {
         setLoading(false);
+        setGroups(data);
       }).catch( e => {
         setError(true);
         setLoading(false);
@@ -28,7 +30,9 @@ function GroupList() {
     <div>
         {/* need the && because there can be no groups */}
         {groups && groups.map(group => {
-            return <p key={group.id}>{group.name}</p>
+            return <Link key={group.id} to={`/details/${group.id}`}>
+                <p>{group.name}: {group.description}</p>
+              </Link>
         })}
     </div>
   );

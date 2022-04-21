@@ -1,9 +1,10 @@
 import React from "react";
-import Logo from '../assets/PLanz.png';
+import Logo from '../assets/Betz.png';
+
 function Header() {
   return (
     <div className="header">
-        <img src={Logo} alt="Planz Logo" height="220"/>
+        <img src={Logo} alt="betz Logo" height="220"/>
     </div>
   );
 }
