@@ -3,7 +3,7 @@ import GroupList from "./group-list";
 
 function Main() {
   return (
-    <div>
+    <div className="main">
         <GroupList/>
     </div>
   );
