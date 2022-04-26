@@ -19,7 +19,6 @@ const useStyles = makeStyles( theme => ({
 
 function GroupDetails() {
     const classes = useStyles();
-
     const { id } = useParams();
     const [data, loading, error] = useFetchGroup(id);
     const [ group, setGroup ] = useState(null);
