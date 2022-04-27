@@ -6,12 +6,15 @@ import Main from './components/main';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './components/hooks/AuthProvider'
+import { AuthProvider } from './components/hooks/useAuth';
+
+const user = JSON.parse(localStorage.getItem('betz-user'));
+
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
+      <AuthProvider user={user}>
         <div className="App">
           <Router>
             <Header/>

@@ -6,17 +6,17 @@ export const AuthProvider = ({user, children}) => {
 
     const [ authData, setAuthData ] = useState(user);
 
-    // const setAuth = newUser => {
-    //   if(newUser){
-    //     localStorage.setItem('bwf-user', JSON.stringify(newUser));
-    //   } else {
-    //     localStorage.removeItem('bwf-user');
-    //   }
-    //   setAuthData(newUser);
-    // }
+    const setAuth = newUser => {
+      if(newUser){
+        localStorage.setItem('betz-user', JSON.stringify(newUser));
+      } else {
+        localStorage.removeItem('betz-user');
+      }
+      setAuthData(newUser);
+    }
 
     return (
-        <AuthContext.Provider value={{authData, setAuth}}>
+        <AuthContext.Provider value={{authData, setAuthData}}>
           {children}
         </AuthContext.Provider>
     )
