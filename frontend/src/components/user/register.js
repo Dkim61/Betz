@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
-import { useAuth } from './hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Grid, TextField } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import EmailIcon from '@mui/icons-material/Email';
-import { register } from './services/user-services';
-import { auth } from './services/user-services';
+import { register } from '../services/user-services';
+import { auth } from '../services/user-services';
 
 
 function Register() {
 
-  const { setAuth } = useAuth();
+  const { authData, setAuthData } = useAuth();
   const navigate = useNavigate();
   const [ username, setUsername] = useState('');
   const [ password, setPassword] = useState('');
@@ -27,11 +27,9 @@ function Register() {
     if(passMatch()){
       const regData = await register({username, email, password, profile: {is_premium: false}});
       if(regData){
-        // const data = await auth({username, password});
-        // setAuth(data);
-        // navigate.push('/account')
-        console.log(regData);
-
+        const data = await auth({username, password});
+        setAuthData(data);
+        navigate('/account')
       }
     } else {
       console.log('pass dont match');

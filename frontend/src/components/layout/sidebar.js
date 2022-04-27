@@ -4,8 +4,8 @@ import Box from '@mui/material/Box';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TextField from '@mui/material/TextField';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import { auth } from './services/user-services';
-import { useAuth } from './hooks/useAuth';
+import { auth } from '../services/user-services';
+import { useAuth } from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
 
 function Sidebar() {

@@ -1,8 +1,8 @@
 import './App.css';
-import GroupList from './components/group-list';
-import Header from './components/header';
-import Sidebar from './components/sidebar';
-import Main from './components/main';
+import GroupList from './components/group/group-list';
+import Header from './components/layout/header';
+import Sidebar from './components/layout/sidebar';
+import Main from './components/layout/main';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { BrowserRouter as Router } from 'react-router-dom';

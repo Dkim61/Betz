@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from '../assets/Betz.png';
+import Logo from '../../assets/Betz.png';
 
 function Header() {
   return (

@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 def upload_path_handler(instance, filename):
-    return "avatars/{id}/{files}".format(id=instance.user.id, file= filename)
+    return "avatars/{id}/{file}".format(id=instance.user.id, file= filename)
 
 # Create your models here.
 class UserProfile(models.Model):
