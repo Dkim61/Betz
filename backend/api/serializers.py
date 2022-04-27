@@ -1,11 +1,22 @@
 from email.headerregistry import Group
 from rest_framework import serializers
-from .models import Group
-from .models import Event
+from .models import Group, Event, UserProfile
+from django.contrib.auth.models import User
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('image',)
 
 # Needs to be above GroupSerializer bc it works top/down and needs to go above serializer with foreign key
+class UserSerializer(serializers.ModelSerializer):
+    # added RELATED NAME "profile"
+    profile = UserProfileSerializer()
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'profile')
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
