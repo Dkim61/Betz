@@ -4,7 +4,9 @@ from .models import Group, Event, UserProfile
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
-
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:

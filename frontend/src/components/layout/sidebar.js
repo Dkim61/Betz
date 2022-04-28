@@ -6,13 +6,15 @@ import TextField from '@mui/material/TextField';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import { auth } from '../services/user-services';
 import { useAuth } from '../hooks/useAuth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import User from '../user/user';
 
 function Sidebar() {
 
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
   const { authData, setAuthData } = useAuth();
+  const navigate = useNavigate();
 // ^ using the custom hook to authenticate
 
   const handleSubmit = async e => {
@@ -24,6 +26,11 @@ function Sidebar() {
   const logout = () => {
     setAuthData(null);
   }
+
+  const account = () => {
+    navigate('/account')
+  }
+
 
   return (
     <div className="sidebar">
@@ -51,9 +58,15 @@ function Sidebar() {
       </form>
     :
       <div>
-        <p>{authData.user.username}</p>
+        <User user={authData.user} />
+        <br />
         <Button color="secondary" variant="contained" onClick={() => logout()}>
           Logout
+        </Button>
+        <br />
+        <br />
+        <Button color="secondary" variant="contained" onClick={() => account()}>
+          My Account
         </Button>
       </div>
     }

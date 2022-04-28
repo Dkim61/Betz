@@ -11,7 +11,7 @@ import { auth } from '../services/user-services';
 
 function Register() {
 
-  const { authData, setAuthData } = useAuth();
+  const { setAuthData } = useAuth();
   const navigate = useNavigate();
   const [ username, setUsername] = useState('');
   const [ password, setPassword] = useState('');

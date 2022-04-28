@@ -5,7 +5,6 @@ import {DateTime} from 'luxon';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import { makeStyles } from '@mui/styles';
-import { red } from '@mui/material/colors';
 
 const useStyles = makeStyles( theme => ({
     dateTime: {
