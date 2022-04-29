@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Group, Event, UserProfile
-from .serializers import GroupSerializer, GroupFullSerializer, EventSerializer, UserSerializer, UserProfileSerializer, ChangePasswordSerializer
+from .models import Group, Event, UserProfile, Member, Comment
+from .serializers import GroupSerializer, GroupFullSerializer, EventSerializer, UserSerializer, UserProfileSerializer, ChangePasswordSerializer, MemberSerializer, CommentSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
@@ -35,7 +35,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
 
-class GroupViewset(viewsets.ModelViewSet):
+class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     authentication_classes = (TokenAuthentication,)
@@ -46,11 +46,58 @@ class GroupViewset(viewsets.ModelViewSet):
         serializer = GroupFullSerializer(instance, many=False, context={'request': request})
         return Response(serializer.data)
 
-class EventViewset(viewsets.ModelViewSet):
+class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+class MemberViewSet(viewsets.ModelViewSet):
+    queryset = Member.objects.all()
+    serializer_class = MemberSerializer
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+
+    @action(methods=['post'], detail=False)
+    def join(self, request):
+        if 'group' in request.data and 'user' in request.data:
+            try:
+                group = Group.objects.get(id=request.data['group'])
+                user = User.objects.get(id=request.data['user'])
+
+                member = Member.objects.create(group=group, user=user, admin=False)
+                serializer = MemberSerializer(member, many=False)
+                response = {'message': 'Joined group', 'results': serializer.data}
+                return Response(response, status=status.HTTP_200_OK)
+            except:
+                response = {'message': 'Cannot join, already a member'}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            response = {'message': 'Wrong params'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['post'], detail=False)
+    def leave(self, request):
+        if 'group' in request.data and 'user' in request.data:
+            try:
+                group = Group.objects.get(id=request.data['group'])
+                user = User.objects.get(id=request.data['user'])
+
+                member = Member.objects.get(group=group, user=user)
+                member.delete()
+                response = {'message': 'Left group'}
+                return Response(response, status=status.HTTP_200_OK)
+            except:
+                response = {'message': 'Group, user or member not found'}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            response = {'message': 'Wrong params'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
