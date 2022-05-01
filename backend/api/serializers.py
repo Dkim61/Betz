@@ -1,6 +1,6 @@
 from email.headerregistry import Group
 from rest_framework import serializers
-from .models import Group, Event, UserProfile, Member, Comment
+from .models import Group, Event, UserProfile, Member, Comment, Bet
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
@@ -31,11 +31,34 @@ class UserSerializer(serializers.ModelSerializer):
         UserProfile.objects.create(user=user, **profile_data)
         Token.objects.create(user=user)
         return user
+        
+class BetSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+    class Meta:
+        model = Bet
+        fields = ('id', 'user', 'event', 'score1', 'score2', 'points')
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ('id', 'team1', 'team2', 'time', 'score1', 'score2', 'group')
+        fields = ('id', 'team1', 'team2', 'time')
+
+class EventFullSerializer(serializers.ModelSerializer):
+    bets = BetSerializer(many=True)
+    is_admin = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Event
+        fields = ('id', 'team1', 'team2', 'time', 'score1', 'score2', 'group', 'bets', 'is_admin')
+
+    def get_is_admin(self, obj):
+        try:
+            user = self.context['request'].user
+            member = Member.objects.get(group=obj.group, user=user)
+            return member.admin
+        except:
+            return None
+
 
 class MemberSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False)
@@ -79,3 +102,9 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('user', 'group', 'description', 'time')
+
+class BetSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+    class Meta:
+        model = Bet
+        fields = ('id', 'user', 'event', 'score1', 'score2', 'points')

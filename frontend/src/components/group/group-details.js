@@ -11,6 +11,7 @@ import { useAuth } from '../hooks/useAuth';
 import { Button } from '@mui/material';
 import { leaveGroup } from '../services/api-calls';
 import Comments from '../comments/comments';
+import EventList from '../events/event-list';
 
 const useStyles = makeStyles( theme => ({
     dateTime: {
@@ -95,20 +96,8 @@ function GroupDetails() {
                                 color="primary">Join Group</Button>
                         }
                         {/* {isAdmin && <Button onClick={()=> addEvent()} variant="contained" color="primary">Add new Event</Button>} */}
-                        <h3>Events:</h3>
-                        {group.events.map ( event => {
-                            const format = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-                            const evtTime = DateTime.fromFormat(event.time, format)
+                        <EventList events={group.events}/>
 
-                            return <div key={event.id}>
-                                <p>{event.team1} VS {event.team2}</p>
-                                <p>
-                                    <CalendarTodayIcon className={classes.dateTime}/>{evtTime.toSQLDate()} 
-                                    <AccessAlarmsIcon className={classes.dateTime}/>{evtTime.toFormat('HH:mm')}
-                                </p>
-
-                            </div>
-                        })}
                         <h3>Members:</h3>
                             { group.members.map ( member => {
                             return <div key={member.id} className={classes.memberContainer}>

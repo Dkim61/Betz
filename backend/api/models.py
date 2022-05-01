@@ -44,3 +44,14 @@ class Comment(models.Model):
     user = models.ForeignKey(User, related_name='user_comments', on_delete=models.CASCADE)
     description = models.CharField(max_length=256, null=False, unique=False)
     time = models.DateTimeField(auto_now_add=True)
+
+class Bet(models.Model):
+    user = models.ForeignKey(User, related_name='user_bets', on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, related_name='bets', on_delete=models.CASCADE)
+    score1 = models.IntegerField(null=True, blank=True)
+    score2 = models.IntegerField(null=True, blank=True)
+    points = models.IntegerField(default=None, null=True, blank=True)
+
+    class Meta:
+        unique_together = (('user', 'event'),)
+        index_together = (('user', 'event'),)

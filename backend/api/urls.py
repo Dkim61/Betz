@@ -11,6 +11,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'profile', views.UserProfileViewSet)
 router.register(r'members', views.MemberViewSet)
 router.register(r'comments', views.CommentViewSet)
+router.register(r'bets', views.BetViewSet)
 
 
 
