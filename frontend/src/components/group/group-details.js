@@ -12,6 +12,7 @@ import { Button } from '@mui/material';
 import { leaveGroup } from '../services/api-calls';
 import Comments from '../comments/comments';
 import EventList from '../events/event-list';
+import { useNavigate } from 'react-router';
 
 const useStyles = makeStyles( theme => ({
     dateTime: {
@@ -36,6 +37,7 @@ function GroupDetails() {
     const [ group, setGroup ] = useState(null);
     const [ isGroup, setInGroup ] = useState(false);
     const [ isAdmin, setIsAdmin] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         if(data?.members){
@@ -64,8 +66,13 @@ function GroupDetails() {
         }
         setGroup(data);
     }, [data])
+
     if (error) return <h1>Error</h1>
     if (loading) return <h1>Loading</h1>
+
+    const addEvent = () => {
+        navigate('/event-form', {state:{group:group}});
+    }
 
     const joinHere = () => {
         joinGroup({user: authData.user.id, group: group.id}).then(
@@ -95,7 +102,7 @@ function GroupDetails() {
                             <Button onClick={()=> joinHere()} variant="contained"
                                 color="primary">Join Group</Button>
                         }
-                        {/* {isAdmin && <Button onClick={()=> addEvent()} variant="contained" color="primary">Add new Event</Button>} */}
+                        {isAdmin && <Button onClick={()=> addEvent()} variant="contained" color="primary">Add new Event</Button>}
                         <EventList events={group.events}/>
 
                         <h3>Members:</h3>

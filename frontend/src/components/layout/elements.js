@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 export const CssTextField = withStyles( theme => ({
   root: {
     '& > *': {
-        color: 'white',
+        color: 'black',
         textAlign: 'center',
         fontSize: '1.2rem'
     },

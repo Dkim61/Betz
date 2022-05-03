@@ -6,6 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import Register from "../user/register";
 import Account from "../user/account";
 import Event from '../events/event';
+import EventForm from '../events/event-form';
 
 function Main() {
 
@@ -20,7 +21,7 @@ function Main() {
         <Route path='/register' element={<Register/>} />
         <Route path='/account' element={<Account/>} />
         <Route path='/event/:id' element={<Event/>} />
-
+        <Route path="/event-form" element={<EventForm/>} />
       </Routes>
     </div>
   );
