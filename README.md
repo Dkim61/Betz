@@ -1,2 +1,2 @@
-# Planz
+# betz
 Event planning app
