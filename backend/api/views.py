@@ -59,6 +59,43 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer = EventFullSerializer(instance, many=False, context={'request': request})
         return Response(serializer.data)
 
+    @action(detail=True, methods=['PUT'])
+    def set_result(self, request, pk):
+        # need the pk for set_results
+        event = self.get_object()
+        if 'score1' in request.data and 'score2' in request.data and event.time < datetime.now(pytz.UTC):
+            event.score1 = request.data['score1']
+            event.score2 = request.data['score2']
+            event.save()
+            self.calculate_points()
+            serializer = EventFullSerializer(event, context={'request': request})
+            return Response(serializer.data)
+        else:
+            response = {"message": "Wrong Params"}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    def calculate_points(self):
+        event = self.get_object()
+        bets = event.bets.all()
+        for bet in bets:
+            user_points = 0
+
+            # 3pts for exact match
+            # 1:1 bet 1:1 = 3pts
+            # 1:1 bet 2:2 = 1pts
+            # 1:2 bet 1:2 = 3pts
+
+            if bet.score1 == event.score1 and bet.score2 == event.score2:
+                user_points = 3
+            else:
+                score_final = event.score1 - event.score2
+                bet_final = bet.score1 - bet.score2
+
+                if (score_final > 0 and bet_final > 0) or (score_final == 0 and bet_final == 0) or (score_final < 0 and bet_final < 0):
+                    user_points = 1
+
+            bet.points = user_points
+            bet.save()
 
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
