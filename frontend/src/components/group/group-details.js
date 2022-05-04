@@ -13,6 +13,7 @@ import { leaveGroup } from '../services/api-calls';
 import Comments from '../comments/comments';
 import EventList from '../events/event-list';
 import { useNavigate } from 'react-router';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 const useStyles = makeStyles( theme => ({
     dateTime: {
@@ -26,6 +27,15 @@ const useStyles = makeStyles( theme => ({
         gridTemplateColumns: 'auto 5fr 1fr',
         alignItems: 'center'
     },
+    gold: { 
+    color: 'gold'
+    },
+    silver: {   
+    color: 'silver'
+    },
+    bronze: {
+        color: 'bronze'
+    }
 }));
 
 
@@ -42,22 +52,22 @@ function GroupDetails() {
     useEffect(()=>{
         if(data?.members){
             
-            // data.members.sort((a,b) => b.points - a.points);
+            data.members.sort((a,b) => b.points - a.points);
 
-            // const availableTrophies = ['gold', 'silver', 'bronze'];
-            // let currentTrophy = 0;
-            // data.members.map( (m, indx) => {
-            //     if(indx === 0){
-            //         m.trophy = availableTrophies[currentTrophy];
-            //     } else {
-            //         if(m.points !== data.members[indx -1].points){
-            //             currentTrophy++;
-            //         }
-            //         if(currentTrophy < availableTrophies.length){
-            //             m.trophy = availableTrophies[currentTrophy];
-            //         }
-            //     }
-            // })
+            const availableTrophies = ['gold', 'silver', 'bronze'];
+            let currentTrophy = 0;
+            data.members.map( (m, indx) => {
+                if(indx === 0){
+                    m.trophy = availableTrophies[currentTrophy];
+                } else {
+                    if(m.points !== data.members[indx -1].points){
+                        currentTrophy++;
+                    }
+                    if(currentTrophy < availableTrophies.length){
+                        m.trophy = availableTrophies[currentTrophy];
+                    }
+                }
+            })
 
             if(authData?.user) {
                 setInGroup(!!data.members.find( member => member.user.id === authData.user.id));
@@ -104,17 +114,17 @@ function GroupDetails() {
                         }
                         {isAdmin && <Button onClick={()=> addEvent()} variant="contained" color="primary">Add new Event</Button>}
                         <EventList events={group.events}/>
-
+                        <br/>
                         <h3>Members:</h3>
-                            { group.members.map ( member => {
-                            return <div key={member.id} className={classes.memberContainer}>
+                    { group.members.map ( member => {
+                        return <div key={member.id} className={classes.memberContainer}>
                             <User user={member.user}/>
-                            {/* <p><EmojiEventsIcon className={`${classes[member.trophy]}`}/></p> */}
+                            <p><EmojiEventsIcon className={`${classes[member.trophy]}`}/></p>
                             <p>{member.points}pts</p>
-                            </div>
-                        })}
-                        <Comments group={group}/>
+                        </div>
+                    })}
 
+                <Comments group={group}/>
                         </React.Fragment>
                 }
         </div>

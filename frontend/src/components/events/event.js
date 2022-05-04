@@ -95,82 +95,66 @@ export default function Event(){
   if (loading) return <h1>Loading....</h1>
 
   
-
   return (
-      <div className={classes.container}>
-        { event && evtTime && 
-          <div>
-            <Link to={`/details/${event.group}`} className={classes.back}><ChevronLeftIcon/></Link>
-            <h3>{event.team1} <span className={classes.accent}>VS</span> {event.team2}</h3>
-            { event.score1 >= 0 && event.score2 >= 0 && <h2>{event.score1} : {event.score2}</h2>}
-            
-            <h2>
-              <CalendarTodayIcon className={classes.dateTime}/>{evtTime.toSQLDate()} 
-              <AlarmIcon className={classes.dateTime}/>{evtTime.toFormat('HH:mm')}
-            </h2>
-            <h2>{timeDiff}</h2>
-            <hr/>
-            <br/>
-            { event && event.bets && event.bets.map(bet => {
-              return <div key={bet.id} className={classes.bets}>
-                <User user={bet.user}/>
-                <h4>{bet.score1} : {bet.score2}</h4>
-                <h4>{bet.points}pts</h4>
-                </div>
-            })}
-            <hr/>
-            <br/>
+    <div className={classes.container}>
+      { event && evtTime && 
+        <div>
+          <Link to={`/details/${event.group}`} className={classes.back}><ChevronLeftIcon/></Link>
+          <h3>{event.team1} <span className={classes.accent}>VS</span> {event.team2}</h3>
+          { event.score1 >= 0 && event.score2 >= 0 && <h2>{event.score1} : {event.score2}</h2>}
+          
+          <h2>
+            <CalendarTodayIcon className={classes.dateTime}/>{evtTime.toSQLDate()} 
+            <AlarmIcon className={classes.dateTime}/>{evtTime.toFormat('HH:mm')}
+          </h2>
+          <h2>{timeDiff}</h2>
+          <hr/>
+          <br/>
+          { event && event.bets && event.bets.map(bet => {
+            return <div key={bet.id} className={classes.bets}>
+              <User user={bet.user}/>
+              <h4>{bet.score1} : {bet.score2}</h4>
+              <h4>{bet.points}pts</h4>
+              </div>
+          })}
+          <hr/>
+          <br/>
+          
+          { isFuture ?
             <div>
-                <CssTextField label="Score 1" type="number" className={classes.numberField}
-                onChange={ e => setScore1(e.target.value)}
-                />
-                <span className={classes.accent}>&nbsp; : &nbsp;</span> 
-              <CssTextField label="Score 2" type="number"  className={classes.numberField}
-                  onChange={ e => setScore2(e.target.value)}
-                />
-                <br/><br/>
-                <Button variant="contained" color="primary"
-                    onClick={()=> sendBet()} disabled={!score1 || !score2}>
-                  Place bet
-                  </Button>
-              </div>
-            {/* { isFuture ?
-              <div>
-                <CssTextField label="Score 1" type="number" className={classes.numberField}
-                onChange={ e => setScore1(e.target.value)}
-                />
-                <span className={classes.accent}>&nbsp; : &nbsp;</span> 
-              <CssTextField label="Score 2" type="number"  className={classes.numberField}
-                  onChange={ e => setScore2(e.target.value)}
-                />
-                <br/><br/>
-                <Button variant="contained" color="primary"
-                    onClick={()=> sendBet()} disabled={!score1 || !score2}>
-                  Place bet
-                  </Button>
-              </div>
-              
-              :
-              event.is_admin ?  */}
-              {/* <div>
-                <CssTextField label="Score 1" type="number"  className={classes.numberField}
-                onChange={ e => setScore1(e.target.value)}
-                />
-                <span className={classes.accent}>&nbsp; : &nbsp;</span> 
-              <CssTextField label="Score 2" type="number"  className={classes.numberField}
-                  onChange={ e => setScore2(e.target.value)}
-                />
-                <br/><br/>
+              <CssTextField label="Score 1" type="number" className={classes.numberField}
+              onChange={ e => setScore1(e.target.value)}
+              />
+              <span className={classes.accent}>&nbsp; : &nbsp;</span> 
+            <CssTextField label="Score 2" type="number"  className={classes.numberField}
+                onChange={ e => setScore2(e.target.value)}
+              />
+              <br/><br/>
               <Button variant="contained" color="primary"
-              onClick={()=> setScores()} disabled={!score1 || !score2}>
-                Set Scores
+                  onClick={()=> sendBet()} disabled={!score1 || !score2}>
+                Place bet
                 </Button>
-                </div> : null */}
-              {/* } */}
-          </div>
-        }
-      </div>
-    
-    
+            </div>
+            
+            :
+            event.is_admin ? 
+            <div>
+              <CssTextField label="Score 1" type="number"  className={classes.numberField}
+              onChange={ e => setScore1(e.target.value)}
+              />
+              <span className={classes.accent}>&nbsp; : &nbsp;</span> 
+            <CssTextField label="Score 2" type="number"  className={classes.numberField}
+                onChange={ e => setScore2(e.target.value)}
+              />
+              <br/><br/>
+            <Button variant="contained" color="primary"
+            onClick={()=> setScores()} disabled={!score1 || !score2}>
+              Set Scores
+              </Button>
+              </div> : null
+            }
+        </div>
+      }
+    </div>
   )
 }
