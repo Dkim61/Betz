@@ -5,7 +5,7 @@ from .models import Group, Event, UserProfile, Member, Comment, Bet
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.db.models import Sum
-
+from django.utils import timezone
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
@@ -48,10 +48,25 @@ class EventSerializer(serializers.ModelSerializer):
 class EventFullSerializer(serializers.ModelSerializer):
     bets = BetSerializer(many=True)
     is_admin = serializers.SerializerMethodField()
+    num_bets = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
-        fields = ('id', 'team1', 'team2', 'time', 'score1', 'score2', 'group', 'bets', 'is_admin')
+        fields = ('id', 'team1', 'team2', 'time', 'score1', 'score2', 'group', 'bets', 'is_admin', 'num_bets')
+
+    def get_num_bets(self, obj):
+        no_bets = Bet.objects.filter(event=obj).count()
+        return no_bets
+
+    def get_bets(self, obj):
+        if obj.time < timezone.now():
+            bets = Bet.objects.filter(event=obj)
+        else:
+            user = self.context['request'].user
+            # we find the user
+            bets = Bet.objects.filter(event=obj, user=user)
+        serializer = BetSerializer(bets, many= True)
+        return serializer.data
 
     def get_is_admin(self, obj):
         try:
@@ -60,6 +75,7 @@ class EventFullSerializer(serializers.ModelSerializer):
             return member.admin
         except:
             return None
+
 
 
 class MemberSerializer(serializers.ModelSerializer):
