@@ -1,11 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom'
 import { getGroups } from '../services/api-calls'
+import GroupListItem from './group-list-item';
+import { useNavigate } from 'react-router';
 
 function GroupList() {
   const [ groups, setGroups ] = useState(null);
   const [ loading, setLoading ] = useState(false);
   const [ error, setError ] = useState(null);
+  const navigate = useNavigate();
 
 
   useEffect (() => {
@@ -26,13 +29,17 @@ function GroupList() {
   if (error) return <h1>Error</h1>
   if (loading) return <h1>Loading</h1>
 
+  const groupClicked = groupId => {
+    console.log("HELLO")
+    // navigate(`details/${groupId}`);
+  }
+
+
   return (
     <div>
         {/* need the && because there can be no groups */}
         {groups && groups.map(group => {
-            return <Link key={group.id} to={`/details/${group.id}`}>
-                <p>{group.name}: {group.description}</p>
-              </Link>
+            return <GroupListItem key={group.id} group={group} />
         })}
     </div>
   );
