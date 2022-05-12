@@ -1,3 +1,4 @@
+from tokenize import group
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -20,6 +21,9 @@ class Group(models.Model):
     class Meta:
         # means you cannot have the same name/location combo
         unique_together = (('name', 'location'))
+    
+    def num_members(self):
+        return Member.objects.filter(group=self).count()
 
 class Event(models.Model):
     team1 = models.CharField(max_length=32, blank=False)
